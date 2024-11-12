@@ -31,10 +31,11 @@ public class GamePanel extends JPanel implements Runnable {
 	public final int screenWidth = tileSize * screenColumn;
 	public final int screenHeight = tileSize * screenRow;
 	
-	private TileManager tileManager = new TileManager(this);
+	protected TileManager tileManager = new TileManager(this);
 	private Thread gameThread;
 	private KeyHandler key = new KeyHandler();
 	public Player player = new Player(this,key);
+	public CollisionHandler collision = new CollisionHandler(this);
 	
 	//World Map Data. To change the world map default settings, change here
 	public final int maxWorldColumn = 50;

@@ -1,6 +1,7 @@
 package entities;
 
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -25,6 +26,13 @@ public class Player extends Entity{
 		 */
 		screenX = panel.screenWidth/2 - (panel.tileSize/2);
 		screenY = panel.screenHeight/2 - (panel.tileSize/2);
+		
+		spriteArea = new Rectangle();
+		spriteArea.x=5;
+		spriteArea.y=16;
+		spriteArea.width = 38;
+		spriteArea.height = 29;
+		
 		setDefaultValues();
 		setPlayerPos();
 	}
@@ -56,21 +64,33 @@ public class Player extends Entity{
 		if (key.upArrow == true || key.downArrow == true || key.rightArrow == true || key.leftArrow == true) {
 		if(key.upArrow == true) {
 			direction = "up";
-			worldY -= speed;
 		}
 		else if(key.downArrow == true) {
 			direction = "down";
-			worldY += speed;
+			
 		}
 		else if(key.leftArrow == true) {
 			direction = "left";
-			worldX -= speed;
+			
 		}
 		else if(key.rightArrow == true) {
 			direction = "right";
-			worldX += speed;
+			
 		}
 
+		// shared Variable which checks for SOLID blocks
+		collisionStatus = false;
+		panel.collision.checkTile(this);
+		
+		// move only of its a non SOLID block
+		if(collisionStatus == false) {
+			switch(direction) {
+			case "up": worldY -= speed; break;
+			case "down": worldY += speed; break;
+			case "left": worldX -= speed; break;
+			case "right": worldX += speed; break;
+			}
+		}
 		
 		/**
 		 * A simple logic to implement animation when a key event is pressed. The spriteTick
