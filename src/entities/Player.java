@@ -11,8 +11,8 @@ import main.GamePanel;
 
 public class Player extends Entity{
 	
-	GamePanel panel;
-	KeyHandler key;
+	private GamePanel panel;
+	private KeyHandler key;
 	
 	public final int screenX;
 	public final int screenY;

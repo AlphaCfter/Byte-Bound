@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import tile.TileManager;
 import entities.Player;
 import inputs.KeyHandler;
+import objects.GameObjects;
 
 public class GamePanel extends JPanel implements Runnable {
 	
@@ -34,8 +35,12 @@ public class GamePanel extends JPanel implements Runnable {
 	protected TileManager tileManager = new TileManager(this);
 	private Thread gameThread;
 	private KeyHandler key = new KeyHandler();
-	public Player player = new Player(this,key);
 	public CollisionHandler collision = new CollisionHandler(this);
+	public AssetLoader assetLoad = new AssetLoader(this);
+	public Player player = new Player(this,key);
+	//prepare 10 slots like an inventory to place objects in the map
+	public GameObjects obj[] = new GameObjects[10]; 
+	
 	
 	//World Map Data. To change the world map default settings, change here
 	public final int maxWorldColumn = 50;
@@ -59,6 +64,10 @@ public class GamePanel extends JPanel implements Runnable {
 		this.setDoubleBuffered(true);
 		this.addKeyListener(key);
 		this.setFocusable(true); //focused to listen the key pressed
+	}
+	
+	public void loadAssets() {
+		assetLoad.setObjects();
 	}
 	
 	public void beginGameThread() {
@@ -127,7 +136,16 @@ public class GamePanel extends JPanel implements Runnable {
 		super.paintComponent(g);
 		
 		Graphics2D gg = (Graphics2D)g;
+		// tile assets
 		tileManager.draw(gg);
+		
+		//object assets with nullpointer checks
+		for(int i =0; i < obj.length; i++) {
+			if(obj[i] != null) {
+				obj[i].draw(gg, this);
+			}
+		}
+		//player assets
 		player.draw(gg);
 		gg.dispose();
 	}

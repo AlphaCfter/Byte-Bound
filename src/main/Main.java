@@ -23,6 +23,7 @@ public class Main {
 			frame.setLocationRelativeTo(null);
 			frame.setVisible(true);
 			
+			gamePanel.loadAssets();
 			gamePanel.beginGameThread();
 			
 	}

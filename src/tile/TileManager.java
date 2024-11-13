@@ -130,10 +130,21 @@ public class TileManager {
 			int screenX = worldX - panel.player.worldX + panel.player.screenX;
 			int screenY = worldY - panel.player.worldY + panel.player.screenY;
 			
-			/**drawImage overrides the repaint componeent and paints the values in
+			/**drawImage overrides the repaint component and paints the values in
 			 * @param screenX Current position of the payer on the world coordinates
+			 * The if function determines the bounds and ONLY renders the area near the player
+			 * rather than loading the entire map on the CPU. The 4 different conditions specify
+			 * 4 different directions upon how the player interacts with the map.
 			 */
+			
+			if(worldX + panel.tileSize > panel.player.worldX - panel.player.screenX &&
+				worldX - panel.tileSize < panel.player.worldX + panel.player.screenX &&
+				worldY + panel.tileSize > panel.player.worldY - panel.player.screenY &&
+				worldY - panel.tileSize < panel.player.worldY + panel.player.screenY) {
+				
 			g.drawImage(tile[tileNum].image, screenX,screenY,panel.tileSize,panel.tileSize,null);
+			
+			}
 			worldColumn++;
 
 			//when the count reaches the world column, returns the index value of worldColumn as 0
