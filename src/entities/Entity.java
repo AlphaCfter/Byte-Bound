@@ -13,10 +13,12 @@ public class Entity {
 	protected int spriteTick = 0;
 	protected int spriteNum = 1;
 	
-	// A rectangle class is made to create an area within the ENTITY sprite where area within
-	// cannot be collided with any tile marked for SOLID area
-	public Rectangle spriteArea;
-	
+	/** A rectangle class is made to create an area within the ENTITY sprite where area within
+	* cannot be collided with any tile marked for SOLID area. solidAreaX and solidAreaY marks
+	* the solid area coordinates whihc are declared as solid area
+	*/
+	public Rectangle spriteAreaRectangle;
+	public int defaultSolidAreaX, defaultSolidAreaY;
 	// A shared variable where the collision handler updates the status based on the current
 	// key combination as well as the tile if set to a solid state
 	public boolean collisionStatus = false;

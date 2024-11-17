@@ -16,6 +16,7 @@ public class Player extends Entity{
 	
 	public final int screenX;
 	public final int screenY;
+	private int hasKey;
 	
 	public Player(GamePanel panel, KeyHandler key) {
 		this.panel = panel;
@@ -27,11 +28,13 @@ public class Player extends Entity{
 		screenX = panel.screenWidth/2 - (panel.tileSize/2);
 		screenY = panel.screenHeight/2 - (panel.tileSize/2);
 		
-		spriteArea = new Rectangle();
-		spriteArea.x=5;
-		spriteArea.y=16;
-		spriteArea.width = 38;
-		spriteArea.height = 29;
+		spriteAreaRectangle = new Rectangle();
+		spriteAreaRectangle.x=5;
+		spriteAreaRectangle.y=16;
+		defaultSolidAreaX = spriteAreaRectangle.x;
+		defaultSolidAreaY = spriteAreaRectangle.y;
+		spriteAreaRectangle.width = 38;
+		spriteAreaRectangle.height = 29;
 		
 		setDefaultValues();
 		setPlayerPos();
@@ -82,6 +85,9 @@ public class Player extends Entity{
 		collisionStatus = false;
 		panel.collision.checkTile(this);
 		
+		int index = panel.collision.checkIfPlayer(this, true);
+		pickUpObject(index);
+		
 		// move only of its a non SOLID block
 		if(collisionStatus == false) {
 			switch(direction) {
@@ -108,6 +114,24 @@ public class Player extends Entity{
 		}
 	}
 }
+	
+	public void pickUpObject(int index) {
+		if(index != Integer.MAX_VALUE) {
+			String objectName = panel.obj[index].name;
+			switch(objectName) {
+			case "Key":
+				hasKey++;
+				panel.obj[index]=null;
+				break;
+			case "Door":
+				if(hasKey > 0) {
+					panel.obj[index] = null;
+					hasKey--;
+				}
+				break;
+			}
+		}
+	}
 	
 	public void draw(Graphics2D gg) {
 		//gg.setColor(Color.white);
