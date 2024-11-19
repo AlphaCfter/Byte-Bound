@@ -4,7 +4,10 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.io.IOException;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JPanel;
 
 import tile.TileManager;
@@ -33,14 +36,14 @@ public class GamePanel extends JPanel implements Runnable {
 	public final int screenHeight = tileSize * screenRow;
 	
 	protected TileManager tileManager = new TileManager(this);
-	private Thread gameThread;
 	private KeyHandler key = new KeyHandler();
+	private Sound sound = new Sound();
 	public CollisionHandler collision = new CollisionHandler(this);
 	public AssetLoader assetLoad = new AssetLoader(this);
 	public Player player = new Player(this,key);
 	//prepare 10 slots like an inventory to place objects in the map
 	public GameObjects obj[] = new GameObjects[10]; 
-	
+	private Thread gameThread;
 	
 	//World Map Data. To change the world map default settings, change here
 	public final int maxWorldColumn = 50;
@@ -68,6 +71,11 @@ public class GamePanel extends JPanel implements Runnable {
 	
 	public void loadAssets() {
 		assetLoad.setObjects();
+			try {
+				playMusic(0);
+			} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+				e.printStackTrace();
+			}
 	}
 	
 	public void beginGameThread() {
@@ -156,6 +164,16 @@ public class GamePanel extends JPanel implements Runnable {
 	public void update() {
 		player.update();
 		
+	}
+	
+	public void playMusic(int i) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+		sound.setMusicFile(i);
+		sound.play();
+		sound.loop();
+	}
+	
+	public void stopMusic() {
+		sound.stop();
 	}
 	
 }
